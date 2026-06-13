@@ -41,7 +41,7 @@ function App() {
       <div className="screen-state error-state">
         <h1>Não foi possível carregar o site</h1>
         <p>{error ?? "Erro desconhecido"}</p>
-        <p>Verifique se a API backend está em execução.</p>
+        <p>Verifique se a API backend está online e se `VITE_API_BASE_URL` está configurada corretamente.</p>
       </div>
     );
   }

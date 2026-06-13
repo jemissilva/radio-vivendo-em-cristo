@@ -1,0 +1,6 @@
+{
+  "framework": "vite",
+  "installCommand": "powershell -NoProfile -Command \"$env:Path='C:\\Program Files\\nodejs;'+$env:Path; npm ci\"",
+  "buildCommand": "powershell -NoProfile -Command \"$env:Path='C:\\Program Files\\nodejs;'+$env:Path; npm run build\"",
+  "outputDirectory": "dist"
+}

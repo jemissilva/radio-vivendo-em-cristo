@@ -905,6 +905,31 @@ Pode ser hospedado em:
 - Fly.io;
 - outro ambiente Node compatível.
 
+#### Deploy no Render
+
+Arquivos preparados no repositório:
+
+- `render.yaml`
+- `.renderignore`
+
+Configuração usada:
+
+- **Root Directory:** raiz do projeto
+- **Build Command:** `npm ci && npm run build`
+- **Start Command:** `npm start`
+- **Health Check Path:** `/health`
+
+Variáveis de ambiente obrigatórias no Render:
+
+- `JWT_SECRET`
+- `CORS_ORIGIN`
+- `NODE_ENV=production`
+
+Observações:
+
+- `PORT` é fornecida automaticamente pelo Render;
+- após publicar o site na Vercel, atualize `CORS_ORIGIN` no Render com o domínio final do frontend.
+
 ### 19.2 Website
 
 Pode ser hospedado em:
@@ -913,6 +938,30 @@ Pode ser hospedado em:
 - Netlify;
 - Cloudflare Pages;
 - qualquer host estático compatível com Vite.
+
+#### Deploy na Vercel
+
+Arquivos preparados no repositório:
+
+- `vercel.json`
+- `website/.vercelignore`
+
+Configuração usada:
+
+- **Root Directory:** `website`
+- **Framework Preset:** `Vite`
+- **Output Directory:** `dist`
+
+Variável de ambiente obrigatória na Vercel:
+
+- `VITE_API_BASE_URL=https://SEU-BACKEND.onrender.com/api/public`
+
+Fluxo recomendado:
+
+1. publicar o backend no Render;
+2. copiar a URL pública do backend;
+3. configurar `VITE_API_BASE_URL` na Vercel;
+4. atualizar `CORS_ORIGIN` no Render com o domínio final da Vercel.
 
 ### 19.3 Mobile
 
