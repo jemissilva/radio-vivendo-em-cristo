@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Rádio Vivendo em Cristo",
+    "slug": "radio-vivendo-em-cristo",
+    "scheme": "radiovivendoemcristo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#0b1020"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "android": {
+      "package": "org.vivendoemcristo.radio",
+      "adaptiveIcon": {
+        "backgroundColor": "#0b1020"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
