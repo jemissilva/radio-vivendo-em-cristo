@@ -10,6 +10,7 @@ import {
   PrayerRequest,
   Program,
   ScheduleEntry,
+  StreamStatus,
 } from "../types";
 
 export const loginAdmin = async (email: string, password: string) => {
@@ -286,6 +287,16 @@ export const updatePrayerRequestStatus = async (
   }
   Object.assign(request, input, { updatedAt: nowIso() });
   return request;
+};
+
+export const getStreamStatus = async () => (await getDatabase()).streamStatus;
+
+export const updateStreamStatus = async (
+  input: Partial<Pick<StreamStatus, "isLive" | "streamUrl" | "fallbackUrl" | "currentTrack" | "bitrateKbps">>,
+) => {
+  const database = await getDatabase();
+  Object.assign(database.streamStatus, input, { updatedAt: nowIso() });
+  return database.streamStatus;
 };
 
 export const createContactMessage = async (

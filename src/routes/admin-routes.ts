@@ -10,6 +10,7 @@ import {
   programSchema,
   scheduleSchema,
 } from "../lib/validators";
+import { z } from "zod";
 import {
   createBanner,
   createContent,
@@ -29,6 +30,7 @@ import {
   listPrayerRequests,
   listPrograms,
   listSchedule,
+  getStreamStatus,
   loginAdmin,
   updateBanner,
   updateContent,
@@ -37,6 +39,7 @@ import {
   updatePrayerRequestStatus,
   updateProgram,
   updateScheduleEntry,
+  updateStreamStatus,
 } from "../services/admin-service";
 
 export const adminRouter = Router();
@@ -261,6 +264,54 @@ adminRouter.get("/prayer-requests", requireAdminOrModerator, async (_request, re
 adminRouter.patch("/prayer-requests/:id", requireAdminOrModerator, async (request, response, next) => {
   try {
     response.json(await updatePrayerRequestStatus(getRouteParam(request.params.id), prayerStatusSchema.parse(request.body)));
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.get("/stream", async (_request, response, next) => {
+  try {
+    response.json(await getStreamStatus());
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.patch("/stream", requireAdminOrOperator, async (request, response, next) => {
+  try {
+    response.json(
+      await updateStreamStatus(
+        z
+          .object({
+            isLive: z.boolean().optional(),
+            streamUrl: z.string().url().optional(),
+            fallbackUrl: z.string().url().optional(),
+            currentTrack: z.string().min(1).optional(),
+            bitrateKbps: z.number().int().nonnegative().optional(),
+          })
+          .parse(request.body),
+      ),
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+adminRouter.put("/live", requireAdminOrOperator, async (request, response, next) => {
+  try {
+    response.json(
+      await updateStreamStatus(
+        z
+          .object({
+            isLive: z.boolean().optional(),
+            streamUrl: z.string().url().optional(),
+            fallbackUrl: z.string().url().optional(),
+            currentTrack: z.string().min(1).optional(),
+            bitrateKbps: z.number().int().nonnegative().optional(),
+          })
+          .parse(request.body),
+      ),
+    );
   } catch (error) {
     next(error);
   }

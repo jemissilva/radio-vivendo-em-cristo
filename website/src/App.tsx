@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ContentSection } from "./components/ContentSection";
 import { ContactSection } from "./components/ContactSection";
 import { EventsSection } from "./components/EventsSection";
@@ -10,8 +11,9 @@ import { ProgramsSection } from "./components/ProgramsSection";
 import { ScheduleSection } from "./components/ScheduleSection";
 import { api } from "./lib/api";
 import { useAsyncData } from "./hooks/useAsyncData";
+import { AdminApp } from "./pages/Admin/AdminApp";
 
-function App() {
+function HomePage() {
   const loadHome = useCallback(
     () =>
       Promise.all([
@@ -75,6 +77,16 @@ function App() {
 
       <Footer />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/admin/*" element={<AdminApp />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 
