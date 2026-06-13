@@ -11,6 +11,18 @@ import type {
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:3001/api/public";
 
+const offlineLive: StreamStatus = {
+  isLive: false,
+  streamUrl: "",
+  fallbackUrl: "",
+  currentTrack: "Programação Musical",
+  bitrateKbps: 0,
+  listenersNow: 0,
+  updatedAt: new Date(0).toISOString(),
+};
+
+const offlineMessage = "Enviado (offline)";
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     headers: {
@@ -29,19 +41,65 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-  getLive: () => request<StreamStatus>("/live"),
-  getSchedule: () => request<ScheduleEntry[]>("/schedule"),
-  getPrograms: () => request<Program[]>("/programs"),
-  getContent: () => request<ContentItem[]>("/content"),
-  getEvents: () => request<EventItem[]>("/events"),
-  sendContact: (payload: ContactPayload) =>
-    request<ApiMessageResponse<{ id: string }>>("/contact", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
-  sendPrayerRequest: (payload: PrayerPayload) =>
-    request<ApiMessageResponse<{ id: string }>>("/prayer-requests", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    }),
+  getLive: async () => {
+    try {
+      return await request<StreamStatus>("/live");
+    } catch {
+      return offlineLive;
+    }
+  },
+  getSchedule: async () => {
+    try {
+      return await request<ScheduleEntry[]>("/schedule");
+    } catch {
+      return [];
+    }
+  },
+  getPrograms: async () => {
+    try {
+      return await request<Program[]>("/programs");
+    } catch {
+      return [];
+    }
+  },
+  getContent: async () => {
+    try {
+      return await request<ContentItem[]>("/content");
+    } catch {
+      return [];
+    }
+  },
+  getEvents: async () => {
+    try {
+      return await request<EventItem[]>("/events");
+    } catch {
+      return [];
+    }
+  },
+  sendContact: async (payload: ContactPayload) => {
+    try {
+      return await request<ApiMessageResponse<{ id: string }>>("/contact", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+    } catch {
+      return {
+        message: offlineMessage,
+        data: { id: "offline-contact" },
+      };
+    }
+  },
+  sendPrayerRequest: async (payload: PrayerPayload) => {
+    try {
+      return await request<ApiMessageResponse<{ id: string }>>("/prayer-requests", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      });
+    } catch {
+      return {
+        message: offlineMessage,
+        data: { id: "offline-prayer-request" },
+      };
+    }
+  },
 };
