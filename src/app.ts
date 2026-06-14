@@ -16,7 +16,12 @@ export const createApp = () => {
       origin: process.env.CORS_ORIGIN ?? "*",
     }),
   );
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginResourcePolicy: { policy: "cross-origin" },
+    }),
+  );
   app.use(express.json({ limit: "2mb" }));
 
   app.get("/health", (_request, response) => {
